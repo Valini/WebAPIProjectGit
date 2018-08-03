@@ -3,17 +3,22 @@
 //header("Content-Type:application/json");
 //setup variables for requests
 $api_key = "dc3bea5de93696d83833add120fba5ec";
-$city = "Toronto";
+//$city = "Montreal";
+$lat="45.5017";
+$lon="73.5673";
 
 //https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b6907d289e10d714a6e88b30761fae22
 //http://api.openweathermap.org/data/2.5/weather?q=Montreal&APPID=dc3bea5de93696d83833add120fba5ec
 
 //setup structured url for request
-$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
-  . $city . "&units=metric&"
+//$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
+//  . $city . "&units=metric&"
+//
+//https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
+$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
+  . "lat=" . $lat."&"
+  . "lon=" . $lon."&units=metric&"
   . "APPID=" . $api_key;
-
-
   //initialize the CURL request
   $ch = curl_init($url_unstructured);
   //setup curl options
@@ -39,6 +44,7 @@ $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
   $sunset=$data->sys->sunset;
   $icon=$data->weather[0]->icon;
   $dt=$data->dt;
+  $city=$data->name;
   //print_r($cp);
 
   //print_r($sunriseTime);
