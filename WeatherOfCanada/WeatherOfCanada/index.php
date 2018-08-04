@@ -2,7 +2,6 @@
 
 <?php
     require_once("functions.php");
-    $map_api_key = "AjDvdPcUrSfJfrA73THbzgQimIgKmNp1u4Q1GAq1TQKcEEVsGU_zn0BaJllRMkhm";
 
     $weathers = getAllCityWeatherInfo();
 
@@ -72,7 +71,7 @@
                 }
               );
               pin.metadata = {
-                  title: '<?= $weather->name ?>'
+                  title: '<?= $weather->id ?>'
               };
 
               //Add the pushpin to the map
@@ -93,7 +92,7 @@
         }
         function moveToDetails(e) {
             var city = e.target.metadata.title;
-            window.location.href="WeatherMap.php?city=" + city;
+            window.location.href="weatherDetails.php?city=" + city;
         }
     </script>
 </head>
@@ -108,22 +107,25 @@
                 <li><a href="#"></a></li>
                 <li><a href="#"></a></li>
             </ul>
-            <form class="navbar-form navbar-left"  action="WeatherMap.php" method="POST">
+                //$cities = array("Quebec", "Toronto", "Vancouver", "Halifax", "Charlottetown", "Regina", "Edmonton", "Fredericton", "Winnipeg", "Ottawa", "st. johns,CA", "Iqaluit", "Yellowknife");
+    $citiIds = ",,,,,,,,,,";
+
+            <form class="navbar-form navbar-left"  action="weatherDetails.php" method="POST">
                 <select name="selectedcity" id="selectedcity" class="form-control">
-                    <option value="Ottawa">Ottawa, Canada</option>
-                    <option value="st. johns,CA">St. John's, Newfoundland and Labrador</option>
-                    <option value="Halifax">Halifax, Nova Scotia</option>
-                    <option value="Fredericton">Fredericton, New Brunswick</option>
-                    <option value="Charlottetown">Charlottetown, Prince Edward Island</option>
-                    <option value="Québec">Québec, Quebec</option>
-                    <option value="Toronto">Toronto, Ontario</option>
-                    <option value="Winnipeg">Winnipeg, Manitoba</option>
-                    <option value="Regina">Regina, Saskatchewan</option>
-                    <option value="Edmonton">Edmonton, Alberta</option>
-                    <option value="Vancouver">Vancouver, British Columbia</option>
-                    <option value="Iqaluit">Iqaluit, Nunavut</option>
-                    <option value="Yellowknife">Yellowknife, Northwest Territories</option>
-                    <option value="Whitehorse">Whitehorse, Yukon</option>
+                    <option value="6094817">Ottawa, Canada</option>
+                    <option value="6324733">St. John's, Newfoundland and Labrador</option>
+                    <option value="6324729">Halifax, Nova Scotia</option>
+                    <option value="5957776">Fredericton, New Brunswick</option>
+                    <option value="5920288">Charlottetown, Prince Edward Island</option>
+                    <option value="6325494">Québec, Quebec</option>
+                    <option value="6167865">Toronto, Ontario</option>
+                    <option value="6183235">Winnipeg, Manitoba</option>
+                    <option value="6119109">Regina, Saskatchewan</option>
+                    <option value="5946768">Edmonton, Alberta</option>
+                    <option value="5814616">Vancouver, British Columbia</option>
+                    <option value="5983720">Iqaluit, Nunavut</option>
+                    <option value="6185377">Yellowknife, Northwest Territories</option>
+                    <option value="6180550">Whitehorse, Yukon</option>
                 </select>
                 <input class="btn btn-default" type="submit" name="submit" value="Go" />
             </form>
