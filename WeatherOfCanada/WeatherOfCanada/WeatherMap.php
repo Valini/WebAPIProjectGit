@@ -1,34 +1,16 @@
 <?php
-//header("Content-Type:application/json");
-//setup variables for requests
-$api_key = "dc3bea5de93696d83833add120fba5ec";
+require_once("functions.php");
+
 
 //getting value of the city selected
- if(isset($_POST['submit']) || isset($_GET['city'])){
-    $city = "";
-    if(isset($_POST['submit'])){
-        $city = $_POST['selectedcity'];
-    }else{
-        $city = $_GET['city'];
-    }
-
-
-    //setup structured url for request
-    $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
-      . $city . "&units=metric&"
-      . "APPID=" . $api_key;
-
-    //initialize the CURL request
-    $ch = curl_init($url_unstructured);
-    //setup curl options
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //prevent output on curl execution
-    //execute CURL request
-    $results = curl_exec($ch);
-    //close CURL handler
-    curl_close($ch);
-    //print_r($results);
-
-    $data = json_decode($results);
+$city = "";
+if(isset($_POST['submit'])){
+    $city = $_POST['selectedcity'];
+}else{
+    $city = $_GET['city'];
+}
+ if($city !== ""){
+    $data = getOneCityWeatherInfo($city);
     //get the weather variables
     $cp = $data->coord;
     $temp = $data->main->temp;
@@ -105,11 +87,6 @@ $api_key = "dc3bea5de93696d83833add120fba5ec";
 		<div class="container">
 			<div class="block-heading">
         <h2 class="text-info">Weather in your City</h2>
-        <?php
-            //If($_SERVER["REQUEST_METHOD"]=="POST")
-              //{
-                   ?>
-
         <div id="yourweather"></div>
         <h4 class="text-info">City of <?= $city ?></h4>
         <img src="http://openweathermap.org/img/w/<?= $icon ?>.png" alt="weather icon"><span><td><?= $readingTime->format('M/d/Y') ?>  </td></span>

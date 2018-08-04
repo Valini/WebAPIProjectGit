@@ -4,8 +4,8 @@
     require_once("functions.php");
     $map_api_key = "AjDvdPcUrSfJfrA73THbzgQimIgKmNp1u4Q1GAq1TQKcEEVsGU_zn0BaJllRMkhm";
 
-    $weathers = getWeatherInfo();
-    
+    $weathers = getAllCityWeatherInfo();
+
     $maptype = "Microsoft.Maps.MapTypeId.aerial";
     if(isset($_GET['maptype'])){
         $tmp = $_GET['maptype'];
@@ -54,21 +54,23 @@
                 zoom: 5
             });
             <?php
-            //$i = 0;
             foreach($weathers as $weather) : ?>
             <?php
-                $lon = floatval($weather->coord->lon) - 0.05;
-                $lat = floatval($weather->coord->lat) + 0.05;
-                $temperature = floatval($weather->main->temp) - 273.15;
-                $icon = 'http://openweathermap.org/img/w/' . $weather->weather[0]->icon; 
+                $lon = floatval($weather->coord->lon);
+                $lat = floatval($weather->coord->lat);
+                $temperature = floatval($weather->main->temp);
+                $icon = 'http://openweathermap.org/img/w/' . $weather->weather[0]->icon;
             ?>
 
               var location = new Microsoft.Maps.Location(<?= $lat ?>,<?= $lon ?>);
-              var pin = new Microsoft.Maps.Pushpin(location, {icon:"<?= $icon ?>.png", height:50, width:50, anchor:new Microsoft.Maps.Point(0,0), draggable: false, 
+              var pin = new Microsoft.Maps.Pushpin(location,
+                {icon:"<?= $icon ?>.png",
+                  height:50, width:50,
+                  anchor:new Microsoft.Maps.Point(0,0), draggable: false,
                   title: '<?= $weather->name ?>',
                   subTitle: '<?= $temperature . '\u02DAC' ?>',
-                  text: '-'
-              });
+                }
+              );
               pin.metadata = {
                   title: '<?= $weather->name ?>'
               };
@@ -77,19 +79,19 @@
               map.entities.push(pin);
 
               Microsoft.Maps.Events.addHandler(pin, 'mouseout', changeCursor);
-              Microsoft.Maps.Events.addHandler(pin, 'mouseover', revertCursor);   
+              Microsoft.Maps.Events.addHandler(pin, 'mouseover', revertCursor);
               Microsoft.Maps.Events.addHandler(pin, 'click', moveToDetails);
             <?php endforeach; ?>
-    
+
         }
 
-        function changeCursor(e) { 
+        function changeCursor(e) {
             map.getRootElement().style.cursor = 'default';
         }
-        function revertCursor(e) { 
+        function revertCursor(e) {
             map.getRootElement().style.cursor = 'crosshair';
         }
-        function moveToDetails(e) { 
+        function moveToDetails(e) {
             var city = e.target.metadata.title;
             window.location.href="WeatherMap.php?city=" + city;
         }
@@ -118,7 +120,7 @@
                     <option value="Winnipeg">Winnipeg, Manitoba</option>
                     <option value="Regina">Regina, Saskatchewan</option>
                     <option value="Edmonton">Edmonton, Alberta</option>
-                    <option value="Victoria">Victoria, British Columbia</option>
+                    <option value="Vancouver">Vancouver, British Columbia</option>
                     <option value="Iqaluit">Iqaluit, Nunavut</option>
                     <option value="Yellowknife">Yellowknife, Northwest Territories</option>
                     <option value="Whitehorse">Whitehorse, Yukon</option>
@@ -145,4 +147,3 @@
     </div>
 </body>
 </html>
-
