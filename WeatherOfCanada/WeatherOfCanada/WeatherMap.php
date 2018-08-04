@@ -71,7 +71,7 @@ if(isset($_POST['submit'])){
         <option value="Winnipeg">Winnipeg, Manitoba</option>
         <option value="Regina">Regina, Saskatchewan</option>
         <option value="Edmonton">Edmonton, Alberta</option>
-        <option value="Victoria">Victoria, British Columbia</option>
+        <option value="Vancouver">Vancouver, British Columbia</option>
         <option value="Iqaluit">Iqaluit, Nunavut</option>
         <option value="Yellowknife">Yellowknife, Northwest Territories</option>
         <option value="Whitehorse">Whitehorse, Yukon</option>
