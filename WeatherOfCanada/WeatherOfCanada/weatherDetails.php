@@ -95,7 +95,15 @@ if(isset($_POST['submit'])){
         </select>
         <input class="btn btn-default" type="submit" name="submit" value="Go" />
     </form>
-
+    <form class="navbar-form navbar-right" action="weatherDetails.php" method="post">
+        <div class="form-group">
+            <input type="number" step="0.00001"  min="-90.00000" max="90.00000" class="form-control" name="lat" placeholder="Enter Latitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+        </div>
+        <div class="form-group">
+            <input type="number" step="0.00001" min="-180.00000" max="180.00000" class="form-control" name="lon" placeholder="Enter Longitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+        </div>
+        <button type="submit" name="submit" class="btn btn-default">Go</button>
+    </form>
   </div>
 </nav>
 <main class="page container" style="margin-top:100px;">
