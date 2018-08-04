@@ -3,22 +3,28 @@
 //header("Content-Type:application/json");
 //setup variables for requests
 $api_key = "dc3bea5de93696d83833add120fba5ec";
+//getting value of the city selected
+  if(isset($_POST['submit'])){
+  $city = $_POST['selectedcity'];
+
+}
+
 //$city = "Montreal";
-$lat="45.5017";
-$lon="73.5673";
+//$lat="45.5017";
+//$lon="73.5673";
 
 //https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b6907d289e10d714a6e88b30761fae22
 //http://api.openweathermap.org/data/2.5/weather?q=Montreal&APPID=dc3bea5de93696d83833add120fba5ec
 
 //setup structured url for request
-//$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
-//  . $city . "&units=metric&"
-//
-//https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
-$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
-  . "lat=" . $lat."&"
-  . "lon=" . $lon."&units=metric&"
+$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
+  . $city . "&units=metric&"
   . "APPID=" . $api_key;
+//https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
+//$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
+//  . "lat=" . $lat."&"
+//  . "lon=" . $lon."&units=metric&"
+//  . "APPID=" . $api_key;
   //initialize the CURL request
   $ch = curl_init($url_unstructured);
   //setup curl options
@@ -53,6 +59,13 @@ $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
   //echo $dt->format('Y-m-d H:i:s');
 $ss = new DateTime("@$sunset");  // convert UNIX timestamp to PHP DateTime
 $readingTime = new DateTime("@$dt");
+
+
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -75,16 +88,31 @@ $readingTime = new DateTime("@$dt");
       <a class="navbar-brand" href="#">WeatherMap</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li>
+      <li class=""><a href="#"></a></li>
+      <li><a href="#"></a></li>
+      <li><a href="#"></a></li>
     </ul>
-    <form class="navbar-form navbar-left" action="/action_page.php">
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search">
-      </div>
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
+    <form class="navbar-form navbar-left"  action="" method="POST">
+    <select name="selectedcity" id="selectedcity" class="form-control">
+
+        <option value="Ottawa">Ottawa, Canada</option>
+        <option value="St. Johns">St. John's, Newfoundland and Labrador</option>
+        <option value="Halifax">Halifax, Nova Scotia</option>
+        <option value="Fredericton">Fredericton, New Brunswick</option>
+        <option value="Charlottetown">Charlottetown, Prince Edward Island</option>
+        <option value="Québec">Québec, Quebec</option>
+        <option value="Toronto">Toronto, Ontario</option>
+        <option value="Winnipeg">Winnipeg, Manitoba</option>
+        <option value="Regina">Regina, Saskatchewan</option>
+        <option value="Edmonton">Edmonton, Alberta</option>
+        <option value="Victoria">Victoria, British Columbia</option>
+        <option value="Iqaluit">Iqaluit, Nunavut</option>
+        <option value="Yellowknife">Yellowknife, Northwest Territories</option>
+        <option value="Whitehorse">Whitehorse, Yukon</option>
+    </select>
+    <input class="btn btn-default" type="submit" name="submit" value="Submit" />
+</form>
+
   </div>
 </nav>
 <main class="page container" style="margin-top:100px;">
