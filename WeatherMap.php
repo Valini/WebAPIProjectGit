@@ -3,13 +3,12 @@
 //header("Content-Type:application/json");
 //setup variables for requests
 $api_key = "dc3bea5de93696d83833add120fba5ec";
+
 //getting value of the city selected
-  if(isset($_POST['submit'])){
-  $city = $_POST['selectedcity'];
+ if(isset($_POST['submit'])){
+$city = $_POST['selectedcity'];
 
-}
 
-//$city = "Montreal";
 //$lat="45.5017";
 //$lon="73.5673";
 
@@ -25,6 +24,7 @@ $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
 //  . "lat=" . $lat."&"
 //  . "lon=" . $lon."&units=metric&"
 //  . "APPID=" . $api_key;
+
   //initialize the CURL request
   $ch = curl_init($url_unstructured);
   //setup curl options
@@ -50,7 +50,7 @@ $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
   $sunset=$data->sys->sunset;
   $icon=$data->weather[0]->icon;
   $dt=$data->dt;
-  $city=$data->name;
+  //$city=$data->name;
   //print_r($cp);
 
   //print_r($sunriseTime);
@@ -60,10 +60,7 @@ $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
 $ss = new DateTime("@$sunset");  // convert UNIX timestamp to PHP DateTime
 $readingTime = new DateTime("@$dt");
 
-
-
-
-
+}
 
 
 ?>
@@ -94,7 +91,6 @@ $readingTime = new DateTime("@$dt");
     </ul>
     <form class="navbar-form navbar-left"  action="" method="POST">
     <select name="selectedcity" id="selectedcity" class="form-control">
-
         <option value="Ottawa">Ottawa, Canada</option>
         <option value="St. Johns">St. John's, Newfoundland and Labrador</option>
         <option value="Halifax">Halifax, Nova Scotia</option>
@@ -121,6 +117,11 @@ $readingTime = new DateTime("@$dt");
 		<div class="container">
 			<div class="block-heading">
         <h2 class="text-info">Weather in your City</h2>
+        <?php
+            If($_SERVER["REQUEST_METHOD"]=="POST")
+              {
+                   ?>
+
         <div id="yourweather"></div>
         <h4 class="text-info">City of <?= $city ?></h4>
         <img src="http://openweathermap.org/img/w/<?= $icon ?>.png" alt="weather icon"><span><td><?= $readingTime->format('M/d/Y') ?>  </td></span>
@@ -161,6 +162,9 @@ $readingTime = new DateTime("@$dt");
       </tr>
     </tbody>
   </table>
+  <?php
+      }
+?>
       </div>
     </div>
   </section>
