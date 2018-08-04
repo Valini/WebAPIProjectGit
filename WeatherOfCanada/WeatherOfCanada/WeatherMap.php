@@ -1,64 +1,73 @@
 <?php
-
+require_once("functions.php");
 //header("Content-Type:application/json");
 //setup variables for requests
 $api_key = "dc3bea5de93696d83833add120fba5ec";
 
 //getting value of the city selected
- if(isset($_POST['submit'])){
-$city = $_POST['selectedcity'];
+ if(isset($_POST['submit']) || isset($_GET['lan'])){
+    $city = "";
+    if(isset($_POST['submit'])){
+        $city = $_POST['selectedcity'];
+    }else{
+        $lan = $_GET['lan'];
+        $lat = $_GET['lat'];
+        $weathers = getWeatherInfo();
+        $city = getCityNameByLonLat($weathers, $lan, $lat);
+        
+        if($city == "none") return;
+    }
 
 
-//$lat="45.5017";
-//$lon="73.5673";
+    //$lat="45.5017";
+    //$lon="73.5673";
 
-//https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b6907d289e10d714a6e88b30761fae22
-//http://api.openweathermap.org/data/2.5/weather?q=Montreal&APPID=dc3bea5de93696d83833add120fba5ec
+    //https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b6907d289e10d714a6e88b30761fae22
+    //http://api.openweathermap.org/data/2.5/weather?q=Montreal&APPID=dc3bea5de93696d83833add120fba5ec
 
-//setup structured url for request
-$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
-  . $city . "&units=metric&"
-  . "APPID=" . $api_key;
-//https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
-//$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
-//  . "lat=" . $lat."&"
-//  . "lon=" . $lon."&units=metric&"
-//  . "APPID=" . $api_key;
+    //setup structured url for request
+    $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
+      . $city . "&units=metric&"
+      . "APPID=" . $api_key;
+    //https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
+    //$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
+    //  . "lat=" . $lat."&"
+    //  . "lon=" . $lon."&units=metric&"
+    //  . "APPID=" . $api_key;
 
-  //initialize the CURL request
-  $ch = curl_init($url_unstructured);
-  //setup curl options
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //prevent output on curl execution
-  //execute CURL request
-  $results = curl_exec($ch);
-  //close CURL handler
-  curl_close($ch);
-  //print_r($results);
+//    print_r($url_unstructured);
+      //initialize the CURL request
+    $ch = curl_init($url_unstructured);
+    //setup curl options
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //prevent output on curl execution
+    //execute CURL request
+    $results = curl_exec($ch);
+    //close CURL handler
+    curl_close($ch);
+    //print_r($results);
 
-  $data = json_decode($results);
+    $data = json_decode($results);
+    //get the weather variables
+    $cp = $data->coord;
+    $temp = $data->main->temp;
+    $tempmin = $data->main->temp_min;
+    $tempmax = $data->main->temp_max;
+    $clouds=$data->weather[0]->description;
+    $wind=$data->wind->speed;
+    $pressure=$data->main->pressure;
+    $humidity=$data->main->humidity;
+    $sunrise=$data->sys->sunrise;
+    $sunset=$data->sys->sunset;
+    $icon=$data->weather[0]->icon;
+    $dt=$data->dt;
+    //$city=$data->name;
 
-  //get the weather variables
-  $cp = $data->coord;
-  $temp = $data->main->temp;
-  $tempmin = $data->main->temp_min;
-  $tempmax = $data->main->temp_max;
-  $clouds=$data->weather[0]->description;
-  $wind=$data->wind->speed;
-  $pressure=$data->main->pressure;
-  $humidity=$data->main->humidity;
-  $sunrise=$data->sys->sunrise;
-  $sunset=$data->sys->sunset;
-  $icon=$data->weather[0]->icon;
-  $dt=$data->dt;
-  //$city=$data->name;
-  //print_r($cp);
+    //print_r($sunriseTime);
 
-  //print_r($sunriseTime);
-
-  $sr = new DateTime("@$sunrise");  // convert UNIX timestamp to PHP DateTime
-  //echo $dt->format('Y-m-d H:i:s');
-$ss = new DateTime("@$sunset");  // convert UNIX timestamp to PHP DateTime
-$readingTime = new DateTime("@$dt");
+    $sr = new DateTime("@$sunrise");  // convert UNIX timestamp to PHP DateTime
+    //echo $dt->format('Y-m-d H:i:s');
+    $ss = new DateTime("@$sunset");  // convert UNIX timestamp to PHP DateTime
+    $readingTime = new DateTime("@$dt");
 
 }
 
@@ -82,7 +91,7 @@ $readingTime = new DateTime("@$dt");
   <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">WeatherMap</a>
+      <a class="navbar-brand" href="index.php">WeatherMap</a>
     </div>
     <ul class="nav navbar-nav">
       <li class=""><a href="#"></a></li>
@@ -118,8 +127,8 @@ $readingTime = new DateTime("@$dt");
 			<div class="block-heading">
         <h2 class="text-info">Weather in your City</h2>
         <?php
-            If($_SERVER["REQUEST_METHOD"]=="POST")
-              {
+            //If($_SERVER["REQUEST_METHOD"]=="POST")
+              //{
                    ?>
 
         <div id="yourweather"></div>
@@ -163,7 +172,7 @@ $readingTime = new DateTime("@$dt");
     </tbody>
   </table>
   <?php
-      }
+      //}
 ?>
       </div>
     </div>

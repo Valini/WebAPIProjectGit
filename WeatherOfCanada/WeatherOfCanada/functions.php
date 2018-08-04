@@ -34,11 +34,47 @@ function getcpOfCanada()
   $data = json_decode($results);
   $cp = $data->resourceSets[0]->resources[0]->point->coordinates;
 
+  //print_r($cp);
+  //getCityNameByLonLat($cp[1], $cp[0]);
   return $cp;
 }
 
+function getCityNameByLonLat($weathers, $lon, $lat){
+    /*
+    $api_key = "AjDvdPcUrSfJfrA73THbzgQimIgKmNp1u4Q1GAq1TQKcEEVsGU_zn0BaJllRMkhm";
+    $url_structured = "http://dev.virtualearth.net/REST/v1/Locations/" . $lat . "," . $lon . "?"
+    //CA/adminDistrict/postalCode/locality/addressLine?includeNeighborhood=includeNeighborhood&include=includeValue&maxResults=maxResults&key=BingMapsKey";
+      . "key=" . $api_key;
+
+    $ch = curl_init($url_structured);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $results = curl_exec($ch);
+    curl_close($ch);
+
+    $data = json_decode($results);
+    
+    $addr = explode(",", $data->resourceSets[0]->resources[0]->name);
+    //print_r($addr[1]);
+    
+    return $addr[1];
+     */
+    
+    foreach($weathers as $city => $weather) {      
+      $orglon = $weather->coord->lon;
+      $orglat = $weather->coord->lat;
+
+      if ($lon >= ($orglon - 2) && $lon <= ($orglon + 2) && $lat >= ($orglat -5) && $lat <= ($orglat +5)){
+          return $city;
+      }
+    }
+        
+    return "none";
+}
+
 function getWeatherInfo(){
-        $cities = array("Quebec", "Montreal", "Toronto", "Vancouver", "Halifax", "Charlottetown", "Regina", "Edmonton", "Fredericton", "Winnipeg", "Ottawa");
+        $cities = array("Quebec", "Toronto", "Vancouver", "Halifax", "Charlottetown", "Regina", "Edmonton", "Fredericton", "Winnipeg", "Ottawa", "St. Johns", "Iqaluit", "Yellowknife");
     
 
     $weathers = array();

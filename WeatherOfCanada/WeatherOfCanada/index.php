@@ -12,14 +12,16 @@ and open the template in the editor.
     $cp = getcpOfCanada();
 
     $weathers = getWeatherInfo();
-    /*
+    
     foreach($weathers as $city => $weather) {      
       $lon = $weather->coord->lon;
       $lat = $weather->coord->lat;
       $temperature = floatval($weather->main->temp) - 273.15;
       $icon = 'http://openweathermap.org/img/w/' . $weather->weather[0]->icon; 
       print_r($city . "<br/>" . $lon . "<br/>" . $lat . "<br/>" . $temperature . "<br/>" . $icon . "<br/>");
-    }*/
+      //$name = getCityNameByLonLat($weathers, $lon, $lat);
+      //print_r($name);
+    }
 ?>
 
 <html>
@@ -38,41 +40,68 @@ and open the template in the editor.
             src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap'
             async defer></script>
     <script type='text/javascript'>
-    function GetMap() {
-        var map = new Microsoft.Maps.Map('#myMap', {
-            credentials: '<?= $map_api_key ?>',
-            center: new Microsoft.Maps.Location(<?= $cp[0]?>,<?= $cp[1] ?>),
-            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
-            labelOverlay: Microsoft.Maps.LabelOverlay.hidden,
-            zoom: 5
-        });
-        <?php
-        //$i = 0;
-        foreach($weathers as $city => $weather) : ?>
-        <?php
-            $lon = floatval($weather->coord->lon) - 0.05;
-            $lat = floatval($weather->coord->lat) + 0.05;
-            //$lon = $weather->coord->lon;
-            //$lat = $weather->coord->lat;
-            $temperature = floatval($weather->main->temp) - 273.15;
-            $icon = 'http://openweathermap.org/img/w/' . $weather->weather[0]->icon; 
-          //echo 'var weather = {city:"' . $city . '", lon:"' . $lon . '", lat:"' . $lat . '", temp:"' . $temperature . '", icon:"' . $icon . '";';
-          //echo 'weathers[' . $i . ']=weather;';     
-          //$i++;
-        //}
-        ?>
-                
-          var location = new Microsoft.Maps.Location(<?= $lat ?>,<?= $lon ?>);
-          var pin = new Microsoft.Maps.Pushpin(location, {icon:"<?= $icon ?>.png", height:50, width:50, anchor:new Microsoft.Maps.Point(0,0), draggable: false, 
-              title: '<?= $city ?>',
-              subTitle: '<?= $temperature . '\u02DAC' ?>',
-              text: '-'
-          });
+        var map = null;
+        var cursorStyle = null;
+        function GetMap() {
+            map = new Microsoft.Maps.Map('#myMap', {
+                credentials: '<?= $map_api_key ?>',
+                center: new Microsoft.Maps.Location(<?= $cp[0]?>,<?= $cp[1] ?>),
+                mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+                labelOverlay: Microsoft.Maps.LabelOverlay.hidden,
+                zoom: 5
+            });
+            <?php
+            //$i = 0;
+            foreach($weathers as $city => $weather) : ?>
+            <?php
+                $lon = floatval($weather->coord->lon) - 0.05;
+                $lat = floatval($weather->coord->lat) + 0.05;
+                $temperature = floatval($weather->main->temp) - 273.15;
+                $icon = 'http://openweathermap.org/img/w/' . $weather->weather[0]->icon; 
+            ?>
 
-          //Add the pushpin to the map
-          map.entities.push(pin);
-        <?php endforeach; ?>
-    }
+              var location = new Microsoft.Maps.Location(<?= $lat ?>,<?= $lon ?>);
+              var pin = new Microsoft.Maps.Pushpin(location, {icon:"<?= $icon ?>.png", height:50, width:50, anchor:new Microsoft.Maps.Point(0,0), draggable: false, 
+                  title: '<?= $city ?>',
+                  subTitle: '<?= $temperature . '\u02DAC' ?>',
+                  text: '-'
+              });
+
+              //Add the pushpin to the map
+              map.entities.push(pin);
+
+              Microsoft.Maps.Events.addHandler(pin, 'mouseout', changeCursor);
+              Microsoft.Maps.Events.addHandler(pin, 'mouseover', revertCursor);   
+              Microsoft.Maps.Events.addHandler(pin, 'click', moveToDetails);
+            <?php endforeach; ?>
+    
+        }
+
+        function changeCursor(e) { 
+            map.getRootElement().style.cursor = 'default';
+        }
+        function revertCursor(e) { 
+            map.getRootElement().style.cursor = 'crosshair';
+        }
+        function moveToDetails(e) { 
+            window.location.href="WeatherMap.php?lan=" + e.location.longitude + "&lat=" + e.location.latitude;
+            /*
+            $.ajax({
+                url: 'http://dev.virtualearth.net/REST/v1/Locations/' + e.location.latitude + ',' + e.location.longitude,
+                data: {
+                    o: 'xml',
+                    key: 'AjDvdPcUrSfJfrA73THbzgQimIgKmNp1u4Q1GAq1TQKcEEVsGU_zn0BaJllRMkhm'
+                },
+                jsonp: "jsonp",
+                success: function (data) {
+                    data;
+                },
+                error: function(){
+                    //Process the error
+                }
+            });
+            */
+        }
     </script>
 </head>
 <body>
