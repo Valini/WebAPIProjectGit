@@ -44,3 +44,24 @@ function getOneCityWeatherInfo($city){
 
     return $data;
 }
+
+function getOneCityWeatherInfoLatLon($lat, $lon){
+    global $weather_api_key;
+    $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
+      . "lat=" . $lat."&"
+      . "lon=" . $lon."&units=metric&"
+      . "APPID=" . $weather_api_key;
+    //initialize the CURL request
+    $ch = curl_init($url_unstructured);
+    //setup curl options
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //prevent output on curl execution
+    //execute CURL request
+    $results = curl_exec($ch);
+    //close CURL handler
+    curl_close($ch);
+    //print_r($results);
+
+    $data = json_decode($results);
+
+    return $data;
+}

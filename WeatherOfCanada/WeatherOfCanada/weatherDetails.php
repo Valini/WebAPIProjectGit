@@ -3,14 +3,30 @@ require_once("functions.php");
 
 
 //getting value of the city selected
-$city = "";
+$cityId = "";
+$lon = "";
+$lat = "";
 if(isset($_POST['submit'])){
-    $cityId = $_POST['selectedcity'];
+    if(isset($_POST['selectedcity'])){
+        $cityId = $_POST['selectedcity'];
+    }else{
+        $lat = $_POST['lat'];
+        $lon = $_POST['lon'];
+    }
 }else{
-    $cityId = $_GET['city'];
+    if(isset($_GET['city'])){
+        $cityId = $_GET['city'];
+    }else{
+        $lat = $_GET['lat'];
+        $lon = $_GET['lon'];
+    }
 }
- if($cityId !== ""){
-    $data = getOneCityWeatherInfo($cityId);
+ if($cityId !== "" || $lon !== ""){
+     $data = null;
+     if($cityId !== "")
+        $data = getOneCityWeatherInfo($cityId);
+     else
+        $data = getOneCityWeatherInfoLatLon($lat, $lon);
     //get the weather variables
     $cp = $data->coord;
     $temp = $data->main->temp;

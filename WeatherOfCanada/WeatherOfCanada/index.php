@@ -82,6 +82,7 @@
               Microsoft.Maps.Events.addHandler(pin, 'click', moveToDetails);
             <?php endforeach; ?>
 
+            Microsoft.Maps.Events.addHandler(map, "rightclick", rightBtnClick);
         }
 
         function changeCursor(e) {
@@ -94,6 +95,13 @@
             var city = e.target.metadata.title;
             window.location.href="weatherDetails.php?city=" + city;
         }
+        function rightBtnClick(e){
+            var lon = e.location.longitude;
+            var lat = e.location.latitude;
+            if(confirm("Do you want see weather details of [" + lon + "][" + lat + "]?"))
+            window.location.href="weatherDetails.php?lon=" + lon + "&lat=" + lat;
+        }
+        
     </script>
 </head>
 <body>
@@ -107,9 +115,7 @@
                 <li><a href="#"></a></li>
                 <li><a href="#"></a></li>
             </ul>
-                //$cities = array("Quebec", "Toronto", "Vancouver", "Halifax", "Charlottetown", "Regina", "Edmonton", "Fredericton", "Winnipeg", "Ottawa", "st. johns,CA", "Iqaluit", "Yellowknife");
-    $citiIds = ",,,,,,,,,,";
-
+ 
             <form class="navbar-form navbar-left"  action="weatherDetails.php" method="POST">
                 <select name="selectedcity" id="selectedcity" class="form-control">
                     <option value="6094817">Ottawa, Canada</option>
@@ -129,7 +135,15 @@
                 </select>
                 <input class="btn btn-default" type="submit" name="submit" value="Go" />
             </form>
-
+            <form class="navbar-form navbar-right" action="weatherDetails.php" method="post">
+                <div class="form-group">
+                    <input type="number" step="0.00001"  min="-90.00000" max="90.00000" class="form-control" name="lat" placeholder="Enter Latitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+                </div>
+                <div class="form-group">
+                    <input type="number" step="0.00001" min="-180.00000" max="180.00000" class="form-control" name="lon" placeholder="Enter Longitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+                </div>
+                <button type="submit" name="submit" class="btn btn-default">Go</button>
+            </form>
         </div>
     </nav>
     <div style="width:100%">
@@ -145,7 +159,7 @@
             <li><a href="index.php?maptype=grayscale">Gray Scale</a></li>
           </ul>
         </div>
-        <div id="myMap" style="position:relative;width:1800px;height:800px;margin:auto;"></div>
+        <div id="myMap" style="position:relative;width:1500px;height:800px;margin:auto;"></div>
     </div>
 </body>
 </html>
