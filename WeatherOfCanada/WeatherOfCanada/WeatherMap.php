@@ -1,52 +1,16 @@
 <?php
 require_once("functions.php");
-//header("Content-Type:application/json");
-//setup variables for requests
-$api_key = "dc3bea5de93696d83833add120fba5ec";
+
 
 //getting value of the city selected
- if(isset($_POST['submit']) || isset($_GET['lan'])){
-    $city = "";
-    if(isset($_POST['submit'])){
-        $city = $_POST['selectedcity'];
-    }else{
-        $lan = $_GET['lan'];
-        $lat = $_GET['lat'];
-        $weathers = getWeatherInfo();
-        $city = getCityNameByLonLat($weathers, $lan, $lat);
-        
-        if($city == "none") return;
-    }
-
-
-    //$lat="45.5017";
-    //$lon="73.5673";
-
-    //https://samples.openweathermap.org/data/2.5/find?q=London&units=metric&appid=b6907d289e10d714a6e88b30761fae22
-    //http://api.openweathermap.org/data/2.5/weather?q=Montreal&APPID=dc3bea5de93696d83833add120fba5ec
-
-    //setup structured url for request
-    $url_unstructured = "http://api.openweathermap.org/data/2.5/weather?q="
-      . $city . "&units=metric&"
-      . "APPID=" . $api_key;
-    //https://samples.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
-    //$url_unstructured = "http://api.openweathermap.org/data/2.5/weather?"
-    //  . "lat=" . $lat."&"
-    //  . "lon=" . $lon."&units=metric&"
-    //  . "APPID=" . $api_key;
-
-//    print_r($url_unstructured);
-      //initialize the CURL request
-    $ch = curl_init($url_unstructured);
-    //setup curl options
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //prevent output on curl execution
-    //execute CURL request
-    $results = curl_exec($ch);
-    //close CURL handler
-    curl_close($ch);
-    //print_r($results);
-
-    $data = json_decode($results);
+$city = "";
+if(isset($_POST['submit'])){
+    $city = $_POST['selectedcity'];
+}else{
+    $city = $_GET['city'];
+}
+ if($city !== ""){
+    $data = getOneCityWeatherInfo($city);
     //get the weather variables
     $cp = $data->coord;
     $temp = $data->main->temp;
@@ -60,15 +24,12 @@ $api_key = "dc3bea5de93696d83833add120fba5ec";
     $sunset=$data->sys->sunset;
     $icon=$data->weather[0]->icon;
     $dt=$data->dt;
-    //$city=$data->name;
 
-    //print_r($sunriseTime);
 
     $sr = new DateTime("@$sunrise");  // convert UNIX timestamp to PHP DateTime
     //echo $dt->format('Y-m-d H:i:s');
     $ss = new DateTime("@$sunset");  // convert UNIX timestamp to PHP DateTime
     $readingTime = new DateTime("@$dt");
-
 }
 
 
@@ -101,7 +62,7 @@ $api_key = "dc3bea5de93696d83833add120fba5ec";
     <form class="navbar-form navbar-left"  action="" method="POST">
     <select name="selectedcity" id="selectedcity" class="form-control">
         <option value="Ottawa">Ottawa, Canada</option>
-        <option value="St. Johns">St. John's, Newfoundland and Labrador</option>
+        <option value="st. johns,CA">St. John's, Newfoundland and Labrador</option>
         <option value="Halifax">Halifax, Nova Scotia</option>
         <option value="Fredericton">Fredericton, New Brunswick</option>
         <option value="Charlottetown">Charlottetown, Prince Edward Island</option>
@@ -115,7 +76,7 @@ $api_key = "dc3bea5de93696d83833add120fba5ec";
         <option value="Yellowknife">Yellowknife, Northwest Territories</option>
         <option value="Whitehorse">Whitehorse, Yukon</option>
     </select>
-    <input class="btn btn-default" type="submit" name="submit" value="Submit" />
+    <input class="btn btn-default" type="submit" name="submit" value="Go" />
 </form>
 
   </div>
@@ -126,11 +87,6 @@ $api_key = "dc3bea5de93696d83833add120fba5ec";
 		<div class="container">
 			<div class="block-heading">
         <h2 class="text-info">Weather in your City</h2>
-        <?php
-            //If($_SERVER["REQUEST_METHOD"]=="POST")
-              //{
-                   ?>
-
         <div id="yourweather"></div>
         <h4 class="text-info">City of <?= $city ?></h4>
         <img src="http://openweathermap.org/img/w/<?= $icon ?>.png" alt="weather icon"><span><td><?= $readingTime->format('M/d/Y') ?>  </td></span>
