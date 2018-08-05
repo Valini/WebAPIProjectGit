@@ -30,9 +30,14 @@
 <head>
     <meta charset="utf-8" />
     <title>Hello Weather</title>
+     <link rel="icon" href="images/earthl.ico">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+    <style>
+      #brandname {
+        font-size: 18pt;
+      }
+    </style>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -98,24 +103,24 @@
         function rightBtnClick(e){
             var lon = e.location.longitude;
             var lat = e.location.latitude;
-            if(confirm("Do you want to see weather details of [" + lon + "][" + lat + "]?"))
+            if(confirm("Do you want see weather details of [" + lon + "][" + lat + "]?"))
             window.location.href="weatherDetails.php?lon=" + lon + "&lat=" + lat;
         }
-        
+
     </script>
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse ">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="index.php">WeatherMap</a>
+                <a class="navbar-brand" href="index.php" id="brandname"><span><img src="images/Internet-Real-icon_s.png" alt="logo"></span>WeatherMap</a>
             </div>
             <ul class="nav navbar-nav">
                 <li class=""><a href="#"></a></li>
                 <li><a href="#"></a></li>
                 <li><a href="#"></a></li>
             </ul>
- 
+
             <form class="navbar-form navbar-left"  action="weatherDetails.php" method="POST">
                 <select name="selectedcity" id="selectedcity" class="form-control">
                     <option value="6094817">Ottawa, Canada</option>
@@ -137,10 +142,10 @@
             </form>
             <form class="navbar-form navbar-right" action="weatherDetails.php" method="post">
                 <div class="form-group">
-                    <input type="number" step="0.00001"  min="-90.00000" max="90.00000" class="form-control" name="lat" placeholder="Enter Latitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+                    <input type="number" step="0.00001"  min="-90.00000" max="90.00000" class="form-control" name="lat" placeholder="Enter Latitude" pattern="((\d+)(\.\d{4}))$" >
                 </div>
                 <div class="form-group">
-                    <input type="number" step="0.00001" min="-180.00000" max="180.00000" class="form-control" name="lon" placeholder="Enter Longitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+                    <input type="number" step="0.00001" min="-180.00000" max="180.00000" class="form-control" name="lon" placeholder="Enter Longitude" pattern="((\d+)(\.\d{4}))$">
                 </div>
                 <button type="submit" name="submit" class="btn btn-default">Go</button>
             </form>
