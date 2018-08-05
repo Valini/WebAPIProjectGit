@@ -56,9 +56,17 @@ if(isset($_POST['submit'])){
 <html>
 <head>
   <title>Hello Weather</title>
+   <link rel="icon" href="images/earthl.ico">
   <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+<style>
+  #brandname {
+    font-size: 18pt;
+  }
+  table {
+    font-size: 16pt;
+  }
+</style>
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -66,10 +74,10 @@ if(isset($_POST['submit'])){
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body background="images/weather.jpg"">
-  <nav class="navbar navbar-inverse">
+  <nav class="navbar navbar-inverse fixed-top ">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">WeatherMap</a>
+      <a class="navbar-brand" id="brandname" href="index.php"><span><img src="images/Internet-Real-icon_s.png" alt="logo"></span>WeatherMap</a>
     </div>
     <ul class="nav navbar-nav">
       <li class=""><a href="#"></a></li>
@@ -97,10 +105,10 @@ if(isset($_POST['submit'])){
     </form>
     <form class="navbar-form navbar-right" action="weatherDetails.php" method="post">
         <div class="form-group">
-            <input type="number" step="0.00001"  min="-90.00000" max="90.00000" class="form-control" name="lat" placeholder="Enter Latitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+            <input type="number" step="0.00001"  min="-90.00000" max="90.00000" class="form-control" name="lat" placeholder="Enter Latitude" pattern="((\d+)(\.\d{4}))$" >
         </div>
         <div class="form-group">
-            <input type="number" step="0.00001" min="-180.00000" max="180.00000" class="form-control" name="lon" placeholder="Enter Longitude" pattern="((\d+)(\.\d{4}))$" title="Has to be 4 decimal points">
+            <input type="number" step="0.00001" min="-180.00000" max="180.00000" class="form-control" name="lon" placeholder="Enter Longitude" pattern="((\d+)(\.\d{4}))$" >
         </div>
         <button type="submit" name="submit" class="btn btn-default">Go</button>
     </form>
@@ -111,10 +119,10 @@ if(isset($_POST['submit'])){
 		<section class="clean-block clean-form dark">
 		<div class="container">
 			<div class="block-heading">
-        <h2 class="text-info">Weather in your City</h2>
+        <h1 class="text-info">Weather Details in your City</h1>
         <div id="yourweather"></div>
-        <h4 class="text-info">City of <?= $city ?></h4>
-        <img src="http://openweathermap.org/img/w/<?= $icon ?>.png" alt="weather icon"><span><td><?= $readingTime->format('M/d/Y') ?>  </td></span>
+        <h2 class="text-info">City of <?= $city ?></h2>
+        <h3><img src="http://openweathermap.org/img/w/<?= $icon ?>.png" height="75" width="100" alt="weather icon"><span><td><?= $readingTime->format('M/d/Y') ?>  </td></span><h3>
         <table class="table table-hover">
     <tbody>
       <tr>
